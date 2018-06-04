@@ -1,5 +1,4 @@
 module Language.Nock5K.Spec where
-import Control.Monad.Instances
 
 -- * Structures
 {-| #spec-l3#

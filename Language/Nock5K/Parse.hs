@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 module Language.Nock5K.Parse where
 
 import Control.Applicative ((<$>))
