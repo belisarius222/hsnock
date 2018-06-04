@@ -105,18 +105,20 @@ tar (a :- Atom 3 :- b)               = tar (a :- b) >>= wut
 tar (a :- Atom 4 :- b)               = tar (a :- b) >>= lus
 tar (a :- Atom 5 :- b)               = tar (a :- b) >>= tis
 
-tar (a :- Atom 6 :- b :- c :- d)     = tar (a :- Atom 2 :- (Atom 0 :- Atom 1) :-
-                                            Atom 2 :- (Atom 1 :- c :- d) :-
-                                            (Atom 1 :- Atom 0) :- Atom 2 :-
-                                            (Atom 1 :- Atom 2 :- Atom 3) :-
-                                            (Atom 1 :- Atom 0) :- Atom 4 :-
-                                            Atom 4 :- b)
-tar (a :- Atom 7 :- b :- c)          = tar (a :- Atom 2 :- b :- Atom 1 :- c)
-tar (a :- Atom 8 :- b :- c)          = tar (a :- Atom 7 :-
-                                            ((Atom 7 :- (Atom 0 :- Atom 1) :- b) :-
-                                             Atom 0 :- Atom 1) :- c)
-tar (a :- Atom 9 :- b :- c)          = tar (a :- Atom 7 :- c :- Atom 2 :-
-                                            (Atom 0 :- Atom 1) :- Atom 0 :- b)
+tar (a :- Atom 6 :- b :- c :- d)     = do suba <- tar (a :- c) 
+                                          subb <- tar (a :- d)
+                                          cond  <- tar (a :- Atom 4 :- Atom 4 :- b)
+                                          tar $ (suba :- subb) :- Atom 0 :- cond
+
+tar (a :- Atom 7 :- b :- c)          = do sub <- tar (a :- b)
+                                          tar $ sub :- c
+
+tar (a :- Atom 8 :- b :- c)          = do pin <- tar (a :- b)
+                                          tar $ (pin :- a) :- c
+
+tar (a :- Atom 9 :- b :- c)          = do core <- tar (a :- c)
+                                          tar $ core :- Atom 0 :- b
+
 tar (a :- Atom 10 :- (b :- c) :- d)  = tar (a :- Atom 8 :- c :- Atom 7 :-
                                             (Atom 0 :- Atom 3) :- d)
 tar (a :- Atom 10 :- b :- c)         = tar (a :- c)
